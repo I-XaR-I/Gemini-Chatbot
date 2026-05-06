@@ -254,8 +254,8 @@ app.post("/api/chat", async (req, res) => {
     const chatId = typeof req.body?.chatId === "string" ? req.body.chatId : "";
     const message = typeof req.body?.message === "string" ? req.body.message : "";
     const requestedModel = typeof req.body?.model === "string" ? req.body.model : "";
-    const attachmentIds = Array.isArray(req.body?.attachmentIds)
-      ? req.body.attachmentIds
+    const attachmentIds: string[] = Array.isArray(req.body?.attachmentIds)
+      ? (req.body.attachmentIds as string[])
       : [];
 
     if (!chatId || !message) {
@@ -265,7 +265,7 @@ app.post("/api/chat", async (req, res) => {
     const chat = ensureChat(chatId);
     const attachments = attachmentIds
       .map((id: string) => chat.files.get(id))
-      .filter((file): file is StoredFile => Boolean(file));
+      .filter((file: StoredFile | undefined): file is StoredFile => Boolean(file));
 
     const attachmentSummaries: StoredFileSummary[] = attachments.map((file: StoredFile) => ({
       id: file.id,
