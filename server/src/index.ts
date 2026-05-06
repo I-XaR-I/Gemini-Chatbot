@@ -267,7 +267,7 @@ app.post("/api/chat", async (req, res) => {
       .map((id: string) => chat.files.get(id))
       .filter((file): file is StoredFile => Boolean(file));
 
-    const attachmentSummaries: StoredFileSummary[] = attachments.map((file) => ({
+    const attachmentSummaries: StoredFileSummary[] = attachments.map((file: StoredFile) => ({
       id: file.id,
       name: file.name,
       mimeType: file.mimeType,
