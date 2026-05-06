@@ -220,7 +220,8 @@ app.get("/api/models", async (req, res) => {
       `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`
     );
     if (!response.ok) {
-      throw new Error(`Model list failed: ${response.status}`);
+      const errorText = await response.text();
+      throw new Error(`Model list failed: ${response.status} ${errorText}`);
     }
     const data = (await response.json()) as {
       models?: Array<{
