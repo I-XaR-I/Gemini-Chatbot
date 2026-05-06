@@ -74,6 +74,13 @@ function getModel(client: GoogleGenerativeAI, name: string) {
   return client.getGenerativeModel({ model: name });
 }
 
+function normalizeModelName(name: string): string {
+  if (!name) {
+    return name;
+  }
+  return name.startsWith("models/") ? name : `models/${name}`;
+}
+
 function isOverloaded(error: unknown): boolean {
   if (!error) {
     return false;
@@ -310,10 +317,10 @@ app.post("/api/chat", async (req, res) => {
         parts: [{ text: msg.content }],
       }));
 
-    const primaryModel = requestedModel || "gemini-1.5-flash";
+    const primaryModel = normalizeModelName(requestedModel || "gemini-1.5-flash");
     const modelNames = [
       primaryModel,
-      process.env.GEMINI_FALLBACK_MODEL ?? "gemini-1.5-flash",
+      normalizeModelName(process.env.GEMINI_FALLBACK_MODEL ?? "gemini-1.5-flash"),
     ].filter((name, index, self) => name && self.indexOf(name) === index);
 
     res.setHeader("Content-Type", "text/event-stream");
