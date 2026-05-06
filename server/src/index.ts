@@ -317,10 +317,10 @@ app.post("/api/chat", async (req, res) => {
         parts: [{ text: msg.content }],
       }));
 
-    const primaryModel = normalizeModelName(requestedModel || "gemini-1.5-flash");
+    const primaryModel = normalizeModelName(requestedModel || "gemini-2.5-flash");
     const modelNames = [
       primaryModel,
-      normalizeModelName(process.env.GEMINI_FALLBACK_MODEL ?? "gemini-1.5-flash"),
+      normalizeModelName(process.env.GEMINI_FALLBACK_MODEL ?? "gemini-2.5-flash"),
     ].filter((name, index, self) => name && self.indexOf(name) === index);
 
     res.setHeader("Content-Type", "text/event-stream");
