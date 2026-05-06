@@ -215,15 +215,22 @@ app.get("/api/models", async (req, res) => {
     if (!response.ok) {
       throw new Error(`Model list failed: ${response.status}`);
     }
-    const data = await response.json();
+    const data = (await response.json()) as {
+      models?: Array<{
+        name: string;
+        displayName?: string;
+        description?: string;
+        supportedGenerationMethods?: string[];
+      }>;
+    };
     const models = (data.models ?? [])
       .filter(
-        (model: { name: string; supportedGenerationMethods?: string[] }) =>
+        (model) =>
           model.name.toLowerCase().includes("gemini") &&
           model.supportedGenerationMethods?.includes("generateContent")
       )
       .map(
-        (model: { name: string; displayName?: string; description?: string }) => ({
+        (model) => ({
           name: model.name,
           displayName: model.displayName,
           description: model.description,
@@ -277,15 +284,18 @@ app.post("/api/chat", async (req, res) => {
     chat.messages.push(userMessage);
 
     const docText = attachments
-      .filter((file) => file.mimeType === "application/pdf" || file.mimeType === "text/plain")
-      .map((file) => `Document: ${file.name}\n${file.text ?? ""}`)
+      .filter(
+        (file: StoredFile) =>
+          file.mimeType === "application/pdf" || file.mimeType === "text/plain"
+      )
+      .map((file: StoredFile) => `Document: ${file.name}\n${file.text ?? ""}`)
       .join("\n\n");
 
     const userText = docText ? `${message}\n\n${docText}` : message;
 
     const imageParts = attachments
-      .filter((file) => file.mimeType.startsWith("image/"))
-      .map((file) => ({
+      .filter((file: StoredFile) => file.mimeType.startsWith("image/"))
+      .map((file: StoredFile) => ({
         inlineData: {
           data: file.buffer.toString("base64"),
           mimeType: file.mimeType,
