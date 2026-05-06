@@ -20,7 +20,7 @@ Create an `.env` file in `server` (use `.env.example` as a reference):
 ```bash
 PORT=3001
 CORS_ORIGIN=http://localhost:5173
-GEMINI_FALLBACK_MODEL=gemini-1.5-flash
+GEMINI_FALLBACK_MODEL=gemini-2.5-flash
 ```
 
 Start the server:

@@ -296,9 +296,9 @@ app.post("/api/chat", async (req, res) => {
       .slice(-12)
       .slice(0, -1)
       .map((msg) => ({
-      role: msg.role === "assistant" ? "model" : "user",
-      parts: [{ text: msg.content }],
-    }));
+        role: msg.role === "assistant" ? "model" : "user",
+        parts: [{ text: msg.content }],
+      }));
 
     const primaryModel = requestedModel || "gemini-1.5-flash";
     const modelNames = [
