@@ -11,6 +11,8 @@ A full-featured, ChatGPT-style Gemini chatbot with multi-session memory, documen
 ### 1) Backend
 
 ```bash
+git clone https://github.com/I-XaR-I/Gemini-Chatbot.git
+cd Gemini-Chatbot
 cd server
 npm install
 ```
